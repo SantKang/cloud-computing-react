@@ -1,23 +1,30 @@
 import React, { useState } from 'react';
 import './App.css';
 
-function App() {    //HOX! Tähän App funktioon käytetty apuna Chatgpt, koska omat HTML taidot olivat hieman ruosteessa. Kysymys oli: Miten voisin luoda funktion HTML-kielellä, joka voisi analysoida käyttäjän syötettä ja kertoa, onko se positiivinen, negatiivinen vai neutraali
+function App() {
   const [inputText, setInputText] = useState('');
   const [result, setResult] = useState('');
 
-  const analyzeSentiment = async (text) => {
-    const response = await fetch("http://sentiment-analysis-route-cloud-computing-module4.2.rahtiapp.fi ", {
+  // Function to analyze sentiment
+  const analyzeSentiment = async (e) => {
+    e.preventDefault(); // Prevent form from reloading the page
+
+    // Fetch sentiment analysis from the backend
+    try {
+      const response = await fetch("http://sentiment-analysis-route-cloud-computing-module4.2.rahtiapp.fi/analyze", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ text }),
-    });
+        body: JSON.stringify({ text: inputText }),
+      });
 
-    const result = await response.json();
-    return result;
-};
-
+      const data = await response.json();
+      setResult(data.sentiment); // Set the result to be displayed
+    } catch (error) {
+      setResult("Error analyzing sentiment. Please try again later.");
+    }
+  };
 
   return (
     <div className="App">
@@ -36,10 +43,11 @@ function App() {    //HOX! Tähän App funktioon käytetty apuna Chatgpt, koska 
         </form>
 
         <div id="result-container">
-          <h2>{result}</h2>
+          <h2>{result ? `Sentimentti: ${result}` : "Tulos tulee tänne..."}</h2>
         </div>
+
         <h1>HOX!</h1>
-        <p>Tämä yksinkertainen funktio ymmärtää sanat: "tykkään", "iloinen" "vihaan" ja "surullinen". Jos haluat kokeilla tuloksia, kannattaa käyttää näitä sanoja.</p>
+        <p>Tämä yksinkertainen funktio ymmärtää sanat: "tykkään", "iloinen", "vihaan" ja "surullinen". Jos haluat kokeilla tuloksia, kannattaa käyttää näitä sanoja.</p>
       </header>
     </div>
   );
