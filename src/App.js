@@ -5,17 +5,19 @@ function App() {    //HOX! Tähän App funktioon käytetty apuna Chatgpt, koska 
   const [inputText, setInputText] = useState('');
   const [result, setResult] = useState('');
 
-  const analyzeSentiment = (e) => {
-    e.preventDefault();
-    
-    if (inputText.toLowerCase().includes('tykkään') || inputText.toLowerCase().includes('iloinen')) {
-      setResult('Positiivinen');
-    } else if (inputText.toLowerCase().includes('vihaan') || inputText.toLowerCase().includes('surullinen')) {
-      setResult('Negatiivinen');
-    } else {
-      setResult('Neutraali');
-    }
-  };
+  const analyzeSentiment = async (text) => {
+    const response = await fetch("https://cloud-computing-mod-4-git-cloud-computing-module4.2.rahtiapp.fi", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text }),
+    });
+
+    const result = await response.json();
+    return result;
+};
+
 
   return (
     <div className="App">
