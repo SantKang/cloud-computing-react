@@ -6,7 +6,7 @@ function App() {    //HOX! Tähän App funktioon käytetty apuna Chatgpt, koska 
   const [result, setResult] = useState('');
 
   const analyzeSentiment = async (text) => {
-    const response = await fetch("https://cloud-computing-mod-4-git-cloud-computing-module4.2.rahtiapp.fi", {
+    const response = await fetch("http://sentiment-analysis-route-cloud-computing-module4.2.rahtiapp.fi ", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
